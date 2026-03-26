@@ -75,7 +75,11 @@
   /* SECTIONS 2 & 3 shared */
   .scroll-section {
     position:relative; width:100%; min-height:100vh;
-    background:linear-gradient(180deg,#1a0a2e 0%,#2d1060 50%,#1a0a2e 100%);
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, #3d008844 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 70%, #00008844 0%, transparent 55%),
+      radial-gradient(ellipse 70% 40% at 50% 90%, #e91e8c22 0%, transparent 50%),
+      linear-gradient(160deg, #08001a 0%, #120028 40%, #0a0018 70%, #080015 100%);
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding:3rem 1.5rem; gap:1.2rem; overflow:hidden;
   }
@@ -311,7 +315,11 @@
   /* ── PHOTO CARDS SECTION ── */
   .photo-section {
     position: relative; width: 100%;
-    background: linear-gradient(180deg,#1a0a2e 0%,#2d1060 50%,#1a0a2e 100%);
+    background:
+      radial-gradient(ellipse 90% 50% at 10% 20%, #e91e8c1a 0%, transparent 55%),
+      radial-gradient(ellipse 70% 60% at 90% 80%, #a855f71a 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 50% 50%, #00006622 0%, transparent 50%),
+      linear-gradient(160deg, #08001a 0%, #100022 50%, #08001a 100%);
     padding: 3rem 1.2rem 5rem;
     display: flex; flex-direction: column; align-items: center; gap: 2rem;
     overflow: hidden;
@@ -697,6 +705,163 @@
     pointer-events: all;
     transform: translateX(0) translateY(0) !important;
   }
+
+  /* ── HEARTS ON RESULT PAGE ── */
+  .hearts-result {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 22;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .hearts-result.active { opacity: 1; }
+  .hr-heart {
+    position: absolute;
+    bottom: -10%;
+    animation: hrFloat linear infinite;
+    pointer-events: none;
+    user-select: none;
+    will-change: transform, opacity;
+  }
+  @keyframes hrFloat {
+    0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 0; }
+    5%   { opacity: 1; }
+    90%  { opacity: .7; }
+    100% { transform: translateY(-110vh) rotate(25deg) scale(.7); opacity: 0; }
+  }
+
+  /* ══ NEON AMBIENT BACKGROUND ══ */
+
+  /* Animated neon orbs floating in bg */
+  .neon-orbs {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 21;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  .neon-orbs.active { opacity: 1; }
+
+  .neon-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: orbDrift ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+  }
+  @keyframes orbDrift {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(var(--dx), var(--dy)) scale(var(--ds)); }
+  }
+
+  /* Neon scanline subtle effect */
+  .neon-scanlines {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 21;
+    opacity: 0;
+    transition: opacity 1s ease;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,.07) 3px,
+      rgba(0,0,0,.07) 4px
+    );
+  }
+  .neon-scanlines.active { opacity: 1; }
+
+  /* Neon glow edges */
+  .neon-edges {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 21;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    background:
+      radial-gradient(ellipse 100% 30% at 50% 0%,   #e91e8c18 0%, transparent 70%),
+      radial-gradient(ellipse 100% 20% at 50% 100%,  #a855f718 0%, transparent 70%),
+      radial-gradient(ellipse 20% 100% at 0%   50%,  #6600ff14 0%, transparent 70%),
+      radial-gradient(ellipse 20% 100% at 100% 50%,  #e91e8c14 0%, transparent 70%);
+    animation: edgePulse 5s ease-in-out infinite alternate;
+  }
+  .neon-edges.active { opacity: 1; }
+  @keyframes edgePulse {
+    0%   { opacity: .6; }
+    50%  { opacity: 1; }
+    100% { opacity: .7; }
+  }
+
+  /* star particles canvas */
+  #neon-stars {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+  #neon-stars.active { opacity: 1; }
+
+  /* ::before neon glow on scroll-section */
+  .scroll-section::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse at 30% 20%, #e91e8c28 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, #a855f728 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, #4400aa18 0%, transparent 60%);
+    pointer-events:none;
+    animation: sectionGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes sectionGlow {
+    0%   { opacity: .6; }
+    50%  { opacity: 1.0; }
+    100% { opacity: .7; }
+  }
+
+  /* Neon glowing divider lines between sections */
+  .scroll-section + .scroll-section::after,
+  .section-video + .scroll-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e91e8c88, #a855f7aa, #e91e8c88, transparent);
+    box-shadow: 0 0 12px #e91e8c66, 0 0 24px #a855f744;
+    animation: neonLine 4s ease-in-out infinite alternate;
+  }
+  @keyframes neonLine {
+    0%   { opacity: .4; box-shadow: 0 0 8px  #e91e8c44; }
+    100% { opacity: 1.0; box-shadow: 0 0 20px #e91e8caa, 0 0 40px #a855f755; }
+  }
+
+  /* Deeper bg for result page */
+  #result-page {
+    background: #060010;
+  }
+
+  /* Neon glow on r-box cards */
+  .r-box {
+    box-shadow: 0 4px 30px #e91e8c22, 0 0 0 1px #a855f733, inset 0 0 30px #e91e8c08 !important;
+    transition: box-shadow .4s ease;
+  }
+  .r-box:hover {
+    box-shadow: 0 4px 40px #e91e8c44, 0 0 0 1px #a855f766, inset 0 0 40px #e91e8c14 !important;
+  }
+
+  /* Neon glow on counter boxes */
+  .unit-box {
+    box-shadow: 0 0 10px #e91e8c22, inset 0 0 15px #a855f711;
+  }
+  .unit-num {
+    text-shadow: 0 0 10px #e91e8c99, 0 0 20px #e91e8c55 !important;
+  }
+
+  /* Neon title glow */
+  .big-title, .feel-title {
+    text-shadow: 0 0 20px #e91e8c99, 0 0 40px #e91e8c55, 0 0 80px #a855f733 !important;
+  }
 </style></head>
 <body>
 
@@ -711,7 +876,7 @@
   </div>
   <div class="player-info">
     <div class="player-title-wrap">
-      <span class="player-title" id="player-title">كل سنة يا حبيبي ❤️</span>
+      <span class="player-title" id="player-title">كل سنة وانتي معايا يا حبيبي ❤️</span>
     </div>
     <div class="player-progress" id="player-progress" onclick="seekAudio(event)">
       <div class="player-progress-fill" id="progress-fill"></div>
@@ -748,12 +913,26 @@
     <div class="card-title">جاهزة 🤔</div>
     <div class="card-sub">كل اللي هنا هيفضل بيني وبينك طول العمر ❤️</div>
     <input class="name-input" id="name-input" type="text" placeholder="❤️اكتبي اسمك❤️" maxlength="20" />
-    <button class="confirm-btn" onclick="showResult()">تأكيدي ❤️</button>
+    <button class="confirm-btn" onclick="showResult()">دوسي هنا ياحياتي ❤️</button>
   </div>
 </div>
 
 <!-- RESULT -->
+<div class="hearts-result" id="hearts-result"></div>
 <div id="result-page">
+<!-- NEON BG EFFECTS (inside result page) -->
+<canvas id="neon-stars" style="position:fixed;inset:0;pointer-events:none;z-index:21;opacity:0;transition:opacity 1.5s ease;"></canvas>
+<div class="neon-orbs" id="neon-orbs" style="z-index:21;">
+  <div class="neon-orb" style="width:600px;height:600px;background:#e91e8c;opacity:.09;top:-150px;left:-150px;--dx:100px;--dy:80px;--ds:1.2;animation-duration:12s;"></div>
+  <div class="neon-orb" style="width:500px;height:500px;background:#a855f7;opacity:.10;bottom:-100px;right:-100px;--dx:-80px;--dy:-60px;--ds:1.15;animation-duration:10s;"></div>
+  <div class="neon-orb" style="width:400px;height:400px;background:#6600ff;opacity:.07;top:40%;left:60%;--dx:-60px;--dy:90px;--ds:1.3;animation-duration:14s;"></div>
+  <div class="neon-orb" style="width:350px;height:350px;background:#ff00aa;opacity:.07;top:65%;left:5%;--dx:50px;--dy:-60px;--ds:.9;animation-duration:9s;"></div>
+  <div class="neon-orb" style="width:450px;height:450px;background:#0044ff;opacity:.05;top:25%;left:35%;--dx:40px;--dy:100px;--ds:1.1;animation-duration:16s;"></div>
+  <div class="neon-orb" style="width:300px;height:300px;background:#ff44aa;opacity:.06;top:80%;left:70%;--dx:-30px;--dy:-40px;--ds:1.0;animation-duration:11s;"></div>
+</div>
+<div class="neon-scanlines" id="neon-scanlines" style="z-index:21;"></div>
+<div class="neon-edges"     id="neon-edges"     style="z-index:21;"></div>
+
 
   <!-- ══ SECTION 1: Video ══ -->
   <div class="section-video">
@@ -782,7 +961,7 @@
 
     <div class="fade-box" data-obs>
       <div class="r-box">
-        <div class="box-label">اللحظة اللي مش هنسيها</div>
+        <div class="box-label">اللحظة اللي مش هنساها</div>
         ❤️ اول مرة اتقابلنا ❤️
       </div>
     </div>
@@ -795,7 +974,7 @@
     </div>
 
     <div class="fade-box d2" data-obs>
-      <div class="big-title">❤️ بداية عمري معاكي</div>
+      <div class="big-title"> بداية عمري معاكي❤️</div>
     </div>
 
     <div class="fade-box d3" data-obs>
@@ -862,7 +1041,7 @@
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-front">
               <span class="flip-front-icon">♥️</span>
-              <span class="flip-front-text">كل</span>
+              <span class="flip-front-text">أول كارت</span>
             </div>
             <div class="flip-back">
               <span class="flip-back-text">كل يوم بحبك أكتر من اللي قبله 💕</span>
@@ -875,7 +1054,7 @@
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-front">
               <span class="flip-front-icon">♥️</span>
-              <span class="flip-front-text">سنة</span>
+              <span class="flip-front-text">تاني كارت</span>
             </div>
             <div class="flip-back">
               <span class="flip-back-text">كل سنة وانتي أغلى حاجة في حياتي 🌹</span>
@@ -888,7 +1067,7 @@
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-front">
               <span class="flip-front-icon">♥️</span>
-              <span class="flip-front-text">وانتي</span>
+              <span class="flip-front-text">تالت كارت</span>
             </div>
             <div class="flip-back">
               <span class="flip-back-text">وانتي جنبي كل حاجة بتبقى تمام ❤️</span>
@@ -923,52 +1102,52 @@
 
     <div class="photo-card" data-photo>
       <img src="https://c.top4top.io/p_3736dnvyf1.jpg" alt="" onerror="this.parentElement.style.display='none'">
-      <div class="photo-card-caption">😍🥰 ببص ف عينيك بنسى الدنيا</div>
+      <div class="photo-card-caption"> ببص ف عينيكي بنسى الدنيا 😍🥰</div>
     </div>
 
     <div class="photo-card" data-photo>
       <img src="https://d.top4top.io/p_37369b0p62.jpg" alt="" onerror="this.parentElement.style.display='none'">
-      <div class="photo-card-caption">🤍💕 ما هو مفيش جمال كدا بردو</div>
+      <div class="photo-card-caption"> ما هو مفيش جمال كدا بردو🤍💕</div>
     </div>
 
     <div class="photo-card" data-photo>
       <img src="https://e.top4top.io/p_37367lt1m3.jpg" alt="" onerror="this.parentElement.style.display='none'">
-      <div class="photo-card-caption">😍 اكسجين ياجدعان</div>
+      <div class="photo-card-caption"> اكسجين ياجدعان 😍🤤</div>
     </div>
 
     <div class="photo-card" data-photo>
       <img src="https://f.top4top.io/p_3736rodk64.jpg" alt="" onerror="this.parentElement.style.display='none'">
-      <div class="photo-card-caption">💪❤️ موزتي حقها تدلع</div>
+      <div class="photo-card-caption"> موزتي حقها تدلع ♥️</div>
     </div>
 
     <div class="photo-card" data-photo>
       <video src="https://g.top4top.io/m_373619fs35.mp4" playsinline preload="metadata" loop muted volume="0" data-autovideo style="width:100%;height:260px;object-fit:cover;display:block;background:#000;" onerror="this.parentElement.style.display='none'"></video>
-      <div class="photo-card-caption">❤️ بحبك يا نورعيني</div>
+      <div class="photo-card-caption"> بحبك يا نورعيني ❤️</div>
     </div>
 
     <div class="photo-card" data-photo>
       <video src="https://h.top4top.io/m_37366fb486.mp4" playsinline preload="metadata" loop muted volume="0" data-autovideo style="width:100%;height:260px;object-fit:cover;display:block;background:#000;" onerror="this.parentElement.style.display='none'"></video>
-      <div class="photo-card-caption">😂❤️ الترينداالات بتاعتنا دي</div>
+      <div class="photo-card-caption">فلا هوى بعد هواك يُهتوى ♥️</div>
     </div>
 
     <div class="photo-card" data-photo>
       <video src="https://i.top4top.io/m_3736dpzf17.mp4" playsinline preload="metadata" loop muted volume="0" data-autovideo style="width:100%;height:260px;object-fit:cover;display:block;background:#000;" onerror="this.parentElement.style.display='none'"></video>
-      <div class="photo-card-caption">❤️ بنتي قبل ماتكوني حبيبتي</div>
+      <div class="photo-card-caption"> بنتي قبل ماتكوني حبيبتي♥️</div>
     </div>
 
     <div class="photo-card" data-photo>
       <video src="https://j.top4top.io/m_37369g46e8.mp4" playsinline preload="metadata" loop muted volume="0" data-autovideo style="width:100%;height:260px;object-fit:cover;display:block;background:#000;" onerror="this.parentElement.style.display='none'"></video>
-      <div class="photo-card-caption">❤️❤️ انتي العيد وانتي فرحتي</div>
+      <div class="photo-card-caption"> انتي العيد وانتي فرحتي ❤️❤️</div>
     </div>
 
     <div class="photo-card" data-photo>
       <video src="https://k.top4top.io/m_37369zo8d9.mp4" playsinline preload="metadata" loop muted volume="0" data-autovideo style="width:100%;height:260px;object-fit:cover;display:block;background:#000;" onerror="this.parentElement.style.display='none'"></video>
-      <div class="photo-card-caption">❤️ بحبك دي قلبلة أوي عليكي انا بعشقك</div>
+      <div class="photo-card-caption"> بحبك دي قلبلة أوي عليكي انا بعشقك ❤️</div>
     </div>
 
     <div class="photo-card" data-photo>
       <video src="https://l.top4top.io/m_3736in5im10.mp4" playsinline preload="metadata" loop muted volume="0" data-autovideo style="width:100%;height:260px;object-fit:cover;display:block;background:#000;" onerror="this.parentElement.style.display='none'"></video>
-      <div class="photo-card-caption">😍🥰 ببص ف عينيك بنسى الدنيا</div>
+      <div class="photo-card-caption"> ببص ف عينيك بنسى الدنيا 😍🥰</div>
     </div>
 
   </div>
@@ -990,7 +1169,7 @@
         <span class="locked-arrow">❯</span>
       </div>
     </div>
-    <div class="fade-box d4" data-obs style="font-size:.7rem;color:#a855f788;text-align:center;">DESIGNED WITH LOVE BY MOHAMED</div>
+    <div class="fade-box d4" data-obs style="font-size:.7rem;color:#a855f788;text-align:center;">DESIGNED WITH LOVE BY Refo</div>
   </div>
 
 </div><!-- end result-page -->
@@ -1547,6 +1726,150 @@
     }
     // Also re-init when result page becomes visible (after name entry)
     setTimeout(initVideos, 3000);
+  })();
+
+
+  // ── Hearts on result page ──
+  (function() {
+    var resultHearts = null;
+
+    function spawnResultHearts() {
+      var wrap = document.getElementById('hearts-result');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      wrap.classList.add('active');
+
+      var emojis = ['❤️','💕','💗','💖','🩷','💓','💝','💘','💞','🌹','✨','💫'];
+      var sizes  = [.7, .9, 1.1, 1.3, 1.6, 2, 2.4];
+
+      for (var i = 0; i < 35; i++) {
+        (function(i) {
+          var h = document.createElement('div');
+          h.className = 'hr-heart';
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          var size = sizes[Math.floor(Math.random() * sizes.length)];
+          h.style.left            = (Math.random() * 100) + '%';
+          h.style.fontSize        = size + 'rem';
+          h.style.animationDuration  = (7 + Math.random() * 12) + 's';
+          h.style.animationDelay     = (Math.random() * 10) + 's';
+          h.style.filter = Math.random() > .6
+            ? 'drop-shadow(0 0 6px #e91e8c88)'
+            : 'drop-shadow(0 0 4px #a855f788)';
+          wrap.appendChild(h);
+        })(i);
+      }
+    }
+
+    function stopResultHearts() {
+      var wrap = document.getElementById('hearts-result');
+      if (wrap) { wrap.classList.remove('active'); wrap.innerHTML = ''; }
+    }
+
+    // Hook into showResult
+    var _orig = window.showResult;
+    window._spawnResultHearts = spawnResultHearts;
+    window._stopResultHearts  = stopResultHearts;
+  })();
+
+
+  // ══ NEON BACKGROUND EFFECTS ══
+  (function() {
+
+    function activateNeon() {
+      var orbs  = document.getElementById('neon-orbs');
+      var lines = document.getElementById('neon-scanlines');
+      var edges = document.getElementById('neon-edges');
+      var stars = document.getElementById('neon-stars');
+      var hearts= document.getElementById('hearts-result');
+      if (orbs)   { orbs.classList.add('active');   orbs.style.opacity='1'; }
+      if (lines)  { lines.classList.add('active');  lines.style.opacity='1'; }
+      if (edges)  { edges.classList.add('active');  edges.style.opacity='1'; }
+      if (stars)  { stars.classList.add('active');  stars.style.opacity='1'; }
+      if (hearts) { hearts.style.opacity='1'; }
+      initStars();
+      spawnResultHeartsNow();
+    }
+
+    // ── Star canvas ──
+    function initStars() {
+      var canvas = document.getElementById('neon-stars');
+      if (!canvas || canvas._init) return;
+      canvas._init = true;
+      var ctx = canvas.getContext('2d');
+      var W, H, stars = [];
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Create 120 stars with neon colors
+      var colors = ['#e91e8c','#a855f7','#ff6eb4','#cc44ff','#ffffff','#ffaadd'];
+      for (var i = 0; i < 120; i++) {
+        stars.push({
+          x: Math.random(),
+          y: Math.random(),
+          r: .3 + Math.random() * 1.2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          speed: .0002 + Math.random() * .0008,
+          phase: Math.random() * Math.PI * 2,
+          glow: Math.random() > .7
+        });
+      }
+
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        stars.forEach(function(s) {
+          var pulse = .4 + .6 * Math.abs(Math.sin(t * s.speed * 1000 + s.phase));
+          ctx.save();
+          ctx.globalAlpha = pulse * .85;
+          if (s.glow) {
+            ctx.shadowBlur  = 8;
+            ctx.shadowColor = s.color;
+          }
+          ctx.beginPath();
+          ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = s.color;
+          ctx.fill();
+          ctx.restore();
+        });
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    }
+
+    // ── Result hearts ──
+    function spawnResultHeartsNow() {
+      var wrap = document.getElementById('hearts-result');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      wrap.classList.add('active');
+      var emojis = ['❤️','💕','💗','💖','🩷','💓','💝','💘','💞'];
+      var sizes  = [.7, .9, 1.1, 1.3, 1.6, 2, 2.5];
+      for (var i = 0; i < 40; i++) {
+        var h = document.createElement('div');
+        h.className = 'hr-heart';
+        h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        var sz = sizes[Math.floor(Math.random() * sizes.length)];
+        h.style.left               = (Math.random() * 100) + '%';
+        h.style.fontSize           = sz + 'rem';
+        h.style.animationDuration  = (8 + Math.random() * 14) + 's';
+        h.style.animationDelay     = (Math.random() * 12) + 's';
+        h.style.filter = Math.random() > .5
+          ? 'drop-shadow(0 0 8px #e91e8caa)'
+          : 'drop-shadow(0 0 6px #a855f7aa)';
+        wrap.appendChild(h);
+      }
+    }
+
+    // Hook into showResult
+    var _origShow = window.showResult;
+    window.showResult = function() {
+      if (_origShow) _origShow.apply(this, arguments);
+      setTimeout(activateNeon, 800);
+    };
   })();
 
 </script>
