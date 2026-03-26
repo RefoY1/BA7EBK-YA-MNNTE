@@ -749,6 +749,7 @@
     border-radius: 50%;
     filter: blur(60px);
     animation: orbDrift ease-in-out infinite alternate;
+
     mix-blend-mode: screen;
   }
   @keyframes orbDrift {
@@ -862,6 +863,46 @@
   .big-title, .feel-title {
     text-shadow: 0 0 20px #e91e8c99, 0 0 40px #e91e8c55, 0 0 80px #a855f733 !important;
   }
+
+  /* ══ MOBILE PERFORMANCE ══ */
+  @media (max-width: 768px) {
+    /* Remove backdrop-filter - heaviest CSS property on mobile */
+    .card, .r-box, .counter-box, .feel-box,
+    .flip-front, .flip-back,
+    .chat-notif, #chat-messages-wrap,
+    .locked-box, .qg-card, .player-art-wrap,
+    #music-player {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Simplify box-shadows */
+    .r-box, .counter-box, .flip-front, .flip-back {
+      box-shadow: 0 2px 10px #e91e8c22 !important;
+    }
+
+    /* Reduce neon orb sizes */
+    .neon-orb { display: none !important; }
+
+    /* Simplify scroll-section bg */
+    .scroll-section {
+      background: linear-gradient(160deg, #08001a 0%, #120028 50%, #08001a 100%) !important;
+    }
+    .photo-section {
+      background: linear-gradient(160deg, #08001a 0%, #100022 50%, #08001a 100%) !important;
+    }
+
+    /* Reduce animation complexity */
+    .neon-scanlines { display: none !important; }
+
+    /* Reduce heart animation count by CSS - hide every other heart */
+    .hr-heart:nth-child(even) { display: none !important; }
+    .heart-float:nth-child(3n) { display: none !important; }
+
+    /* Simplify unit-num text-shadow on mobile */
+    .unit-num { text-shadow: 0 0 8px #e91e8c66 !important; }
+    .big-title, .feel-title { text-shadow: 0 0 15px #e91e8c77 !important; }
+  }
 </style></head>
 <body>
 
@@ -876,7 +917,7 @@
   </div>
   <div class="player-info">
     <div class="player-title-wrap">
-      <span class="player-title" id="player-title">كل سنة وانتي معايا يا حبيبي ❤️</span>
+      <span class="player-title" id="player-title">كل سنة يا حبيبي ❤️</span>
     </div>
     <div class="player-progress" id="player-progress" onclick="seekAudio(event)">
       <div class="player-progress-fill" id="progress-fill"></div>
@@ -913,7 +954,7 @@
     <div class="card-title">جاهزة 🤔</div>
     <div class="card-sub">كل اللي هنا هيفضل بيني وبينك طول العمر ❤️</div>
     <input class="name-input" id="name-input" type="text" placeholder="❤️اكتبي اسمك❤️" maxlength="20" />
-    <button class="confirm-btn" onclick="showResult()">دوسي هنا ياحياتي ❤️</button>
+    <button class="confirm-btn" onclick="showResult()">دوسي هنا ياحبيبي ❤️</button>
   </div>
 </div>
 
@@ -961,7 +1002,7 @@
 
     <div class="fade-box" data-obs>
       <div class="r-box">
-        <div class="box-label">اللحظة اللي مش هنساها</div>
+        <div class="box-label">اللحظة اللي مش هنسيها</div>
         ❤️ اول مرة اتقابلنا ❤️
       </div>
     </div>
@@ -974,7 +1015,7 @@
     </div>
 
     <div class="fade-box d2" data-obs>
-      <div class="big-title"> بداية عمري معاكي❤️</div>
+      <div class="big-title"> بداية عمري معاكي ❤️</div>
     </div>
 
     <div class="fade-box d3" data-obs>
@@ -1099,6 +1140,16 @@
 
   <!-- ══ SECTION 4: Photo Cards ══ -->
   <div class="photo-section">
+
+    <div class="photo-card" data-photo>
+      <img src="https://c.top4top.io/p_3736dnvyf1.jpg" alt="" onerror="this.parentElement.style.display='none'">
+      <div class="photo-card-caption">😍🥰 ببص ف عينيك بنسى الدنيا</div>
+    </div>
+
+    <div class="photo-card" data-photo>
+      <img src="https://d.top4top.io/p_37369b0p62.jpg" alt="" onerror="this.parentElement.style.display='none'">
+      <div class="photo-card-caption">🤍💕 ما هو مفيش جمال كدا بردو</div>
+    </div>
 
     <div class="photo-card" data-photo>
       <img src="https://c.top4top.io/p_3736dnvyf1.jpg" alt="" onerror="this.parentElement.style.display='none'">
@@ -1263,7 +1314,8 @@
   // ── Global Floating Hearts (fixed layer) ──
   const hglobal = document.getElementById('hearts-global');
   const emojis = ['❤️','💗','💕','💖','💝','🌹'];
-  for (let i = 0; i < 30; i++) {
+  var heartCount = isMobile ? 8 : 30;
+  for (let i = 0; i < heartCount; i++) {
     const h = document.createElement('div');
     h.className = 'heart-float';
     h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
@@ -1418,6 +1470,10 @@
     if (e.key === 'Enter') showResult();
   });
 
+
+  // ── Mobile detection for performance ──
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
+
   // ══════════════════════════════════════
   // ── CHAT & TELEGRAM ──
   // ══════════════════════════════════════
@@ -1456,7 +1512,7 @@
     if (!pollingInterval) {
       // أول شيء: خد آخر update_id عشان منبعتش رسائل قديمة
       initPolling();
-      pollingInterval = setInterval(pollForReply, 3000);
+      pollingInterval = setInterval(pollForReply, isMobile ? 5000 : 3000);
     }
   }
 
@@ -1704,7 +1760,7 @@
           vid.pause();
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: isMobile ? 0.7 : 0.4 });
 
     function initVideos() {
       document.querySelectorAll('video[data-autovideo]').forEach(function(vid) {
@@ -1781,8 +1837,8 @@
       var edges = document.getElementById('neon-edges');
       var stars = document.getElementById('neon-stars');
       var hearts= document.getElementById('hearts-result');
-      if (orbs)   { orbs.classList.add('active');   orbs.style.opacity='1'; }
-      if (lines)  { lines.classList.add('active');  lines.style.opacity='1'; }
+      if (orbs && !isMobile)   { orbs.classList.add('active');   orbs.style.opacity='1'; }
+      if (lines && !isMobile)  { lines.classList.add('active');  lines.style.opacity='1'; }
       if (edges)  { edges.classList.add('active');  edges.style.opacity='1'; }
       if (stars)  { stars.classList.add('active');  stars.style.opacity='1'; }
       if (hearts) { hearts.style.opacity='1'; }
@@ -1807,7 +1863,8 @@
 
       // Create 120 stars with neon colors
       var colors = ['#e91e8c','#a855f7','#ff6eb4','#cc44ff','#ffffff','#ffaadd'];
-      for (var i = 0; i < 120; i++) {
+      var starCount = isMobile ? 40 : 120;
+      for (var i = 0; i < starCount; i++) {
         stars.push({
           x: Math.random(),
           y: Math.random(),
@@ -1835,7 +1892,8 @@
           ctx.fill();
           ctx.restore();
         });
-        requestAnimationFrame(draw);
+        if (!window._tabHidden) requestAnimationFrame(draw);
+        else setTimeout(function(){ requestAnimationFrame(draw); }, 500);
       }
       requestAnimationFrame(draw);
     }
@@ -1848,7 +1906,8 @@
       wrap.classList.add('active');
       var emojis = ['❤️','💕','💗','💖','🩷','💓','💝','💘','💞'];
       var sizes  = [.7, .9, 1.1, 1.3, 1.6, 2, 2.5];
-      for (var i = 0; i < 40; i++) {
+      var rHeartCount = isMobile ? 12 : 40;
+      for (var i = 0; i < rHeartCount; i++) {
         var h = document.createElement('div');
         h.className = 'hr-heart';
         h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
@@ -1871,6 +1930,12 @@
       setTimeout(activateNeon, 800);
     };
   })();
+
+
+  // Pause canvas when tab hidden (saves battery on mobile)
+  document.addEventListener('visibilitychange', function() {
+    window._tabHidden = document.hidden;
+  });
 
 </script>
 </body>
